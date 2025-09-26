@@ -436,10 +436,10 @@ in the Software without restriction...
 ### **Saad Nadeem** 
 *Full-Stack Flutter Developer & AI Enthusiast*
 
-- 🌐 **Portfolio**: [saadnadeem.dev](https://saadnadeem.dev)
-- 💼 **LinkedIn**: [linkedin.com/in/saadnadeem27](https://linkedin.com/in/saadnadeem27)
-- 🐦 **Twitter**: [@saadnadeem27](https://twitter.com/saadnadeem27)
-- 📧 **Email**: saadnadeem.dev@gmail.com
+<!-- - 🌐 **Portfolio**: [saadnadeem.dev](https://saadnadeem.dev) -->
+- 💼 **LinkedIn**: [linkedin.com/in/saadnadeem27](https://www.linkedin.com/in/saad-nadeem-07-an-expert-flutter-developer/)
+<!-- - 🐦 **Twitter**: [@saadnadeem27](https://twitter.com/saadnadeem27) -->
+<!-- - 📧 **Email**: saadnadeem.dev@gmail.com -->
 - 🐱 **GitHub**: [@saadnadeem27](https://github.com/saadnadeem27)
 
 ---
