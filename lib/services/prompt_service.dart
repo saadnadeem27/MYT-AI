@@ -1,4 +1,3 @@
-import 'package:uuid/uuid.dart';
 import '../models/prompt_model.dart';
 
 class PromptService {
@@ -6,15 +5,14 @@ class PromptService {
   factory PromptService() => _instance;
   PromptService._internal();
 
-  final Uuid _uuid = const Uuid();
-
   // Dummy data for demonstration
   final List<PromptModel> _dummyPrompts = [
     // Writing Prompts
     PromptModel(
       id: '1',
       title: 'Creative Blog Post Generator',
-      content: 'Write a comprehensive blog post about [TOPIC] that engages readers with storytelling, includes practical tips, and ends with a compelling call-to-action. Target audience: [AUDIENCE]. Word count: [WORD_COUNT]. Tone: [TONE].',
+      content:
+          'Write a comprehensive blog post about [TOPIC] that engages readers with storytelling, includes practical tips, and ends with a compelling call-to-action. Target audience: [AUDIENCE]. Word count: [WORD_COUNT]. Tone: [TONE].',
       category: 'Writing',
       type: 'ChatGPT',
       tone: 'Professional',
@@ -30,7 +28,8 @@ class PromptService {
     PromptModel(
       id: '2',
       title: 'Fantasy World Builder',
-      content: 'Create a detailed fantasy world with unique magic system, diverse cultures, and rich history. Include: geography, political systems, languages, and major conflicts. Style: [STYLE]. Target audience: [AUDIENCE].',
+      content:
+          'Create a detailed fantasy world with unique magic system, diverse cultures, and rich history. Include: geography, political systems, languages, and major conflicts. Style: [STYLE]. Target audience: [AUDIENCE].',
       category: 'Storytelling',
       type: 'ChatGPT',
       tone: 'Creative',
@@ -47,7 +46,8 @@ class PromptService {
     PromptModel(
       id: '3',
       title: 'Cyberpunk Character Design',
-      content: 'Create a cyberpunk character portrait with neon lighting, futuristic clothing, and cybernetic enhancements. Style: digital art, highly detailed, 8k resolution. Mood: dark and atmospheric. Color palette: neon blues and purples.',
+      content:
+          'Create a cyberpunk character portrait with neon lighting, futuristic clothing, and cybernetic enhancements. Style: digital art, highly detailed, 8k resolution. Mood: dark and atmospheric. Color palette: neon blues and purples.',
       category: 'Art & Design',
       type: 'MidJourney',
       tone: 'Creative',
@@ -63,7 +63,8 @@ class PromptService {
     PromptModel(
       id: '4',
       title: 'Minimalist Logo Designer',
-      content: 'Design a clean, minimalist logo for [COMPANY_NAME] in [INDUSTRY]. Use simple geometric shapes, limited color palette (max 2 colors), and ensure scalability. Style should convey [BRAND_VALUES].',
+      content:
+          'Design a clean, minimalist logo for [COMPANY_NAME] in [INDUSTRY]. Use simple geometric shapes, limited color palette (max 2 colors), and ensure scalability. Style should convey [BRAND_VALUES].',
       category: 'Art & Design',
       type: 'DALL-E',
       tone: 'Professional',
@@ -80,7 +81,8 @@ class PromptService {
     PromptModel(
       id: '5',
       title: 'React Component Generator',
-      content: 'Create a reusable React component for [COMPONENT_TYPE] with TypeScript support. Include: props interface, error handling, accessibility features, and unit tests. Follow best practices and modern React patterns.',
+      content:
+          'Create a reusable React component for [COMPONENT_TYPE] with TypeScript support. Include: props interface, error handling, accessibility features, and unit tests. Follow best practices and modern React patterns.',
       category: 'Coding',
       type: 'ChatGPT',
       tone: 'Technical',
@@ -97,7 +99,8 @@ class PromptService {
     PromptModel(
       id: '6',
       title: 'Social Media Campaign Creator',
-      content: 'Design a 30-day social media campaign for [PRODUCT/SERVICE] targeting [AUDIENCE]. Include: content calendar, hashtag strategy, engagement tactics, and KPIs. Platforms: [PLATFORMS].',
+      content:
+          'Design a 30-day social media campaign for [PRODUCT/SERVICE] targeting [AUDIENCE]. Include: content calendar, hashtag strategy, engagement tactics, and KPIs. Platforms: [PLATFORMS].',
       category: 'Marketing',
       type: 'ChatGPT',
       tone: 'Persuasive',
@@ -114,7 +117,8 @@ class PromptService {
     PromptModel(
       id: '7',
       title: 'Business Plan Analyzer',
-      content: 'Analyze this business plan and provide detailed feedback on: market analysis, financial projections, competitive advantage, and growth strategy. Include actionable recommendations for improvement.',
+      content:
+          'Analyze this business plan and provide detailed feedback on: market analysis, financial projections, competitive advantage, and growth strategy. Include actionable recommendations for improvement.',
       category: 'Business',
       type: 'ChatGPT',
       tone: 'Professional',
@@ -131,7 +135,8 @@ class PromptService {
     PromptModel(
       id: '8',
       title: 'Interactive Learning Module',
-      content: 'Create an interactive learning module about [SUBJECT] for [GRADE_LEVEL] students. Include: learning objectives, engaging activities, assessment questions, and multimedia suggestions.',
+      content:
+          'Create an interactive learning module about [SUBJECT] for [GRADE_LEVEL] students. Include: learning objectives, engaging activities, assessment questions, and multimedia suggestions.',
       category: 'Education',
       type: 'ChatGPT',
       tone: 'Friendly',
@@ -164,7 +169,9 @@ class PromptService {
   Future<List<PromptModel>> getPromptsByCategory(String category) async {
     await Future.delayed(const Duration(milliseconds: 300));
     if (category == 'All') return _dummyPrompts;
-    return _dummyPrompts.where((prompt) => prompt.category == category).toList();
+    return _dummyPrompts
+        .where((prompt) => prompt.category == category)
+        .toList();
   }
 
   Future<List<PromptModel>> searchPrompts(String query) async {
@@ -172,7 +179,8 @@ class PromptService {
     return _dummyPrompts.where((prompt) {
       return prompt.title.toLowerCase().contains(query.toLowerCase()) ||
           prompt.content.toLowerCase().contains(query.toLowerCase()) ||
-          prompt.tags.any((tag) => tag.toLowerCase().contains(query.toLowerCase()));
+          prompt.tags
+              .any((tag) => tag.toLowerCase().contains(query.toLowerCase()));
     }).toList();
   }
 
@@ -184,7 +192,7 @@ class PromptService {
     int complexity = 1,
   }) async {
     await Future.delayed(const Duration(seconds: 2));
-    
+
     final prompts = <String>[
       'Create a comprehensive guide about ${_getRandomTopic()} that covers all essential aspects and provides actionable insights.',
       'Write an engaging story about ${_getRandomCharacter()} who discovers ${_getRandomDiscovery()} in a ${_getRandomSetting()}.',
@@ -223,60 +231,125 @@ class PromptService {
 
   // Helper methods for random generation
   String _getRandomTopic() {
-    final topics = ['artificial intelligence', 'sustainable living', 'digital marketing', 
-                   'productivity', 'creativity', 'leadership', 'innovation'];
+    final topics = [
+      'artificial intelligence',
+      'sustainable living',
+      'digital marketing',
+      'productivity',
+      'creativity',
+      'leadership',
+      'innovation'
+    ];
     return topics[DateTime.now().millisecondsSinceEpoch % topics.length];
   }
 
   String _getRandomCharacter() {
-    final characters = ['a young inventor', 'a space explorer', 'a mysterious detective', 
-                       'a magical librarian', 'a time traveler', 'a robot chef'];
-    return characters[DateTime.now().millisecondsSinceEpoch % characters.length];
+    final characters = [
+      'a young inventor',
+      'a space explorer',
+      'a mysterious detective',
+      'a magical librarian',
+      'a time traveler',
+      'a robot chef'
+    ];
+    return characters[
+        DateTime.now().millisecondsSinceEpoch % characters.length];
   }
 
   String _getRandomDiscovery() {
-    final discoveries = ['a hidden portal', 'an ancient artifact', 'a secret code', 
-                        'a lost civilization', 'a powerful technology', 'a forgotten spell'];
-    return discoveries[DateTime.now().millisecondsSinceEpoch % discoveries.length];
+    final discoveries = [
+      'a hidden portal',
+      'an ancient artifact',
+      'a secret code',
+      'a lost civilization',
+      'a powerful technology',
+      'a forgotten spell'
+    ];
+    return discoveries[
+        DateTime.now().millisecondsSinceEpoch % discoveries.length];
   }
 
   String _getRandomSetting() {
-    final settings = ['futuristic city', 'enchanted forest', 'abandoned space station', 
-                     'underwater kingdom', 'floating islands', 'virtual reality world'];
+    final settings = [
+      'futuristic city',
+      'enchanted forest',
+      'abandoned space station',
+      'underwater kingdom',
+      'floating islands',
+      'virtual reality world'
+    ];
     return settings[DateTime.now().millisecondsSinceEpoch % settings.length];
   }
 
   String _getRandomArtStyle() {
-    final styles = ['minimalist', 'cyberpunk', 'steampunk', 'art nouveau', 'surreal', 'photorealistic'];
+    final styles = [
+      'minimalist',
+      'cyberpunk',
+      'steampunk',
+      'art nouveau',
+      'surreal',
+      'photorealistic'
+    ];
     return styles[DateTime.now().millisecondsSinceEpoch % styles.length];
   }
 
   String _getRandomSubject() {
-    final subjects = ['a majestic dragon', 'a futuristic city', 'a serene landscape', 
-                     'a powerful warrior', 'a magical creature', 'a space battle'];
+    final subjects = [
+      'a majestic dragon',
+      'a futuristic city',
+      'a serene landscape',
+      'a powerful warrior',
+      'a magical creature',
+      'a space battle'
+    ];
     return subjects[DateTime.now().millisecondsSinceEpoch % subjects.length];
   }
 
   String _getRandomMood() {
-    final moods = ['dramatic', 'peaceful', 'mysterious', 'energetic', 'melancholic', 'inspiring'];
+    final moods = [
+      'dramatic',
+      'peaceful',
+      'mysterious',
+      'energetic',
+      'melancholic',
+      'inspiring'
+    ];
     return moods[DateTime.now().millisecondsSinceEpoch % moods.length];
   }
 
   String _getRandomProduct() {
-    final products = ['a fitness app', 'eco-friendly products', 'online courses', 
-                     'smart home devices', 'health supplements', 'creative tools'];
+    final products = [
+      'a fitness app',
+      'eco-friendly products',
+      'online courses',
+      'smart home devices',
+      'health supplements',
+      'creative tools'
+    ];
     return products[DateTime.now().millisecondsSinceEpoch % products.length];
   }
 
   String _getRandomAudience() {
-    final audiences = ['young professionals', 'busy parents', 'college students', 
-                      'entrepreneurs', 'seniors', 'creative professionals'];
+    final audiences = [
+      'young professionals',
+      'busy parents',
+      'college students',
+      'entrepreneurs',
+      'seniors',
+      'creative professionals'
+    ];
     return audiences[DateTime.now().millisecondsSinceEpoch % audiences.length];
   }
 
   String _getRandomChannel() {
-    final channels = ['social media', 'email campaigns', 'content marketing', 
-                     'influencer partnerships', 'SEO', 'paid advertising'];
+    final channels = [
+      'social media',
+      'email campaigns',
+      'content marketing',
+      'influencer partnerships',
+      'SEO',
+      'paid advertising'
+    ];
     return channels[DateTime.now().millisecondsSinceEpoch % channels.length];
   }
 
@@ -286,48 +359,100 @@ class PromptService {
   }
 
   String _getRandomFunction() {
-    final functions = ['organize their tasks', 'learn new skills', 'connect with others', 
-                      'manage finances', 'stay healthy', 'be more creative'];
+    final functions = [
+      'organize their tasks',
+      'learn new skills',
+      'connect with others',
+      'manage finances',
+      'stay healthy',
+      'be more creative'
+    ];
     return functions[DateTime.now().millisecondsSinceEpoch % functions.length];
   }
 
   String _getRandomFeature() {
-    final features = ['AI recommendations', 'real-time collaboration', 'voice control', 
-                     'personalization', 'gamification', 'offline sync'];
+    final features = [
+      'AI recommendations',
+      'real-time collaboration',
+      'voice control',
+      'personalization',
+      'gamification',
+      'offline sync'
+    ];
     return features[DateTime.now().millisecondsSinceEpoch % features.length];
   }
 
   String _getRandomConcept() {
-    final concepts = ['quantum computing', 'machine learning', 'blockchain technology', 
-                     'sustainable energy', 'space exploration', 'genetic engineering'];
+    final concepts = [
+      'quantum computing',
+      'machine learning',
+      'blockchain technology',
+      'sustainable energy',
+      'space exploration',
+      'genetic engineering'
+    ];
     return concepts[DateTime.now().millisecondsSinceEpoch % concepts.length];
   }
 
   String _getRandomLevel() {
-    final levels = ['beginner', 'child', 'teenager', 'adult learner', 'professional', 'expert'];
+    final levels = [
+      'beginner',
+      'child',
+      'teenager',
+      'adult learner',
+      'professional',
+      'expert'
+    ];
     return levels[DateTime.now().millisecondsSinceEpoch % levels.length];
   }
 
   String _getRandomGoal() {
-    final goals = ['launching a startup', 'learning a new language', 'getting fit', 
-                  'writing a book', 'traveling the world', 'building an audience'];
+    final goals = [
+      'launching a startup',
+      'learning a new language',
+      'getting fit',
+      'writing a book',
+      'traveling the world',
+      'building an audience'
+    ];
     return goals[DateTime.now().millisecondsSinceEpoch % goals.length];
   }
 
   String _getRandomTimeframe() {
-    final timeframes = ['30 days', '3 months', '6 months', '1 year', '2 years', 'a weekend'];
-    return timeframes[DateTime.now().millisecondsSinceEpoch % timeframes.length];
+    final timeframes = [
+      '30 days',
+      '3 months',
+      '6 months',
+      '1 year',
+      '2 years',
+      'a weekend'
+    ];
+    return timeframes[
+        DateTime.now().millisecondsSinceEpoch % timeframes.length];
   }
 
   String _getRandomProject() {
-    final projects = ['a mobile app', 'a website', 'a marketing campaign', 
-                     'a creative workshop', 'a business plan', 'an art installation'];
+    final projects = [
+      'a mobile app',
+      'a website',
+      'a marketing campaign',
+      'a creative workshop',
+      'a business plan',
+      'an art installation'
+    ];
     return projects[DateTime.now().millisecondsSinceEpoch % projects.length];
   }
 
   String _getRandomTheme() {
-    final themes = ['sustainability', 'technology', 'community', 'innovation', 
-                   'wellness', 'education', 'creativity'];
+    final themes = [
+      'sustainability',
+      'technology',
+      'community',
+      'innovation',
+      'wellness',
+      'education',
+      'creativity'
+    ];
     return themes[DateTime.now().millisecondsSinceEpoch % themes.length];
   }
 }

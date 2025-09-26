@@ -16,104 +16,157 @@ class FavoritesScreen extends StatelessWidget {
     final userController = Get.find<UserController>();
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.backgroundLinearGradient,
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.red.shade400, Colors.pink.shade400],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.red.shade400, Colors.pink.shade400],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.red.shade400.withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
                             ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Icon(
-                            Icons.favorite,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+                          ],
                         ),
-                        const SizedBox(width: 16),
-                        const Expanded(
-                          child: Text(
-                            'My Favorites',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                        child: const Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'My Favorites',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.red.withOpacity(0.3),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.favorite,
+                                        color: Colors.red.shade300,
+                                        size: 12,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        'Curated',
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Obx(() => Text(
+                                      '${promptController.favoritePrompts.length} saved',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.6),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Your personally curated collection of AI prompts',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.7),
                     ),
-                    const SizedBox(height: 8),
-                    Obx(() => Text(
-                          '${promptController.favoritePrompts.length} saved prompts',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white.withOpacity(0.7),
-                          ),
-                        )),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
 
-              // Stats Section
-              _buildStatsSection(userController),
+            // Stats Section
+            _buildStatsSection(userController),
 
-              // Favorite Categories
-              _buildFavoriteCategoriesSection(userController, promptController),
+            // Favorite Categories
+            _buildFavoriteCategoriesSection(userController, promptController),
 
-              // Favorites List
-              Expanded(
-                child: Obx(() {
-                  if (promptController.isLoading.value) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  final favorites = promptController.favoritePrompts;
-
-                  if (favorites.isEmpty) {
-                    return _buildEmptyState();
-                  }
-
-                  return AnimationLimiter(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: favorites.length,
-                      itemBuilder: (context, index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: _buildFavoriteCard(favorites[index], promptController),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+            // Favorites List
+            Expanded(
+              child: Obx(() {
+                if (promptController.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                }),
-              ),
-            ],
-          ),
+                }
+
+                final favorites = promptController.favoritePrompts;
+
+                if (favorites.isEmpty) {
+                  return _buildEmptyState();
+                }
+
+                return AnimationLimiter(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: favorites.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: _buildFavoriteCard(
+                                favorites[index], promptController),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }),
+            ),
+          ],
         ),
       ),
     );
@@ -160,7 +213,8 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, List<Color> gradient) {
+  Widget _buildStatCard(
+      String label, String value, IconData icon, List<Color> gradient) {
     return GlassContainer(
       child: Column(
         children: [
@@ -202,7 +256,8 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFavoriteCategoriesSection(UserController userController, PromptController promptController) {
+  Widget _buildFavoriteCategoriesSection(
+      UserController userController, PromptController promptController) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -218,8 +273,9 @@ class FavoritesScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Obx(() {
-            final favoriteCategories = userController.currentUser.value?.favoriteCategories ?? [];
-            
+            final favoriteCategories =
+                userController.currentUser.value?.favoriteCategories ?? [];
+
             if (favoriteCategories.isEmpty) {
               return GlassContainer(
                 child: Text(
@@ -259,7 +315,8 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFavoriteCard(PromptModel prompt, PromptController promptController) {
+  Widget _buildFavoriteCard(
+      PromptModel prompt, PromptController promptController) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: GlassContainer(
@@ -273,7 +330,8 @@ class FavoritesScreen extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         gradient: AppTheme.primaryLinearGradient,
                         borderRadius: BorderRadius.circular(12),
@@ -289,7 +347,8 @@ class FavoritesScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppTheme.secondaryColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
@@ -374,7 +433,8 @@ class FavoritesScreen extends StatelessWidget {
                 runSpacing: 4,
                 children: prompt.tags.take(3).map((tag) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -445,7 +505,7 @@ class FavoritesScreen extends StatelessWidget {
                     onPressed: () {
                       Get.dialog(_buildPromptDialog(prompt, promptController));
                     },
-                    height: 40,
+                    height: 50,
                     gradient: [Colors.red.shade400, Colors.pink.shade400],
                   ),
                 ),
@@ -527,7 +587,8 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPromptDialog(PromptModel prompt, PromptController promptController) {
+  Widget _buildPromptDialog(
+      PromptModel prompt, PromptController promptController) {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: GlassContainer(

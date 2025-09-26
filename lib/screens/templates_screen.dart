@@ -16,115 +16,177 @@ class TemplatesScreen extends StatelessWidget {
     final templateController = Get.find<TemplateController>();
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.backgroundLinearGradient,
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header with Search
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.purple.shade400, Colors.blue.shade400],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header with Search
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.purple.shade400,
+                              Colors.blue.shade400
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.purple.shade400.withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
                             ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Icon(
-                            Icons.description_outlined,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+                          ],
                         ),
-                        const SizedBox(width: 16),
-                        const Expanded(
-                          child: Text(
-                            'Templates',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
+                        child: const Icon(
+                          Icons.description_outlined,
+                          color: Colors.white,
+                          size: 24,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Ready-to-use prompt templates for any occasion',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white.withOpacity(0.7),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    GlassSearchBar(
-                      controller: _searchController,
-                      hintText: 'Search templates...',
-                      onChanged: (query) {
-                        templateController.setSearchQuery(query);
-                      },
-                      onClear: () {
-                        templateController.setSearchQuery('');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
-              // Category Filter
-              _buildCategoryFilter(templateController),
-
-              // Stats Section
-              _buildStatsSection(templateController),
-
-              // Templates List
-              Expanded(
-                child: Obx(() {
-                  if (templateController.isLoading.value) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  final templates = templateController.filteredTemplates;
-
-                  if (templates.isEmpty) {
-                    return _buildEmptyState(templateController);
-                  }
-
-                  return AnimationLimiter(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: templates.length,
-                      itemBuilder: (context, index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: _buildTemplateCard(templates[index], templateController),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Templates',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.green.withOpacity(0.3),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 6,
+                                        height: 6,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.green,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        'Ready to Use',
+                                        style: TextStyle(
+                                          color: Colors.green.shade300,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '50+ Templates',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.6),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Professional prompt templates crafted by AI experts',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.7),
                     ),
-                  );
-                }),
+                  ),
+                  const SizedBox(height: 20),
+                  GlassSearchBar(
+                    controller: _searchController,
+                    hintText: 'Search templates...',
+                    onChanged: (query) {
+                      templateController.setSearchQuery(query);
+                    },
+                    onClear: () {
+                      templateController.setSearchQuery('');
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildTemplateStats(),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // Category Filter
+            _buildCategoryFilter(templateController),
+
+            // Stats Section
+            _buildStatsSection(templateController),
+            SizedBox(height: 16),
+
+            // Templates List
+            Expanded(
+              child: Obx(() {
+                if (templateController.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                final templates = templateController.filteredTemplates;
+
+                if (templates.isEmpty) {
+                  return _buildEmptyState(templateController);
+                }
+
+                return AnimationLimiter(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: templates.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: _buildTemplateCard(
+                                templates[index], templateController),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }),
+            ),
+          ],
         ),
       ),
     );
@@ -134,24 +196,24 @@ class TemplatesScreen extends StatelessWidget {
     return Container(
       height: 50,
       margin: const EdgeInsets.only(bottom: 16),
-      child: Obx(() => ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: templateController.categories.length,
-            itemBuilder: (context, index) {
-              final category = templateController.categories[index];
-              final isSelected = templateController.selectedCategory.value == category;
-              
-              return Container(
-                margin: const EdgeInsets.only(right: 12),
-                child: CategoryChip(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: templateController.categories.length,
+        itemBuilder: (context, index) {
+          final category = templateController.categories[index];
+
+          return Container(
+            margin: const EdgeInsets.only(right: 12),
+            child: Obx(() => CategoryChip(
                   label: category,
-                  isSelected: isSelected,
+                  isSelected:
+                      templateController.selectedCategory.value == category,
                   onTap: () => templateController.setCategory(category),
-                ),
-              );
-            },
-          )),
+                )),
+          );
+        },
+      ),
     );
   }
 
@@ -160,8 +222,10 @@ class TemplatesScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Obx(() {
         final totalTemplates = templateController.allTemplates.length;
-        final freeTemplates = templateController.allTemplates.where((t) => !t.isPremium).length;
-        final premiumTemplates = templateController.allTemplates.where((t) => t.isPremium).length;
+        final freeTemplates =
+            templateController.allTemplates.where((t) => !t.isPremium).length;
+        final premiumTemplates =
+            templateController.allTemplates.where((t) => t.isPremium).length;
 
         return Row(
           children: [
@@ -197,7 +261,8 @@ class TemplatesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, List<Color> gradient) {
+  Widget _buildStatCard(
+      String label, String value, IconData icon, List<Color> gradient) {
     return GlassContainer(
       child: Column(
         children: [
@@ -239,7 +304,8 @@ class TemplatesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTemplateCard(PromptTemplate template, TemplateController templateController) {
+  Widget _buildTemplateCard(
+      PromptTemplate template, TemplateController templateController) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: GlassContainer(
@@ -253,10 +319,14 @@ class TemplatesScreen extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.purple.shade400, Colors.blue.shade400],
+                          colors: [
+                            Colors.purple.shade400,
+                            Colors.blue.shade400
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -272,7 +342,8 @@ class TemplatesScreen extends StatelessWidget {
                     if (template.isPremium) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
@@ -363,7 +434,8 @@ class TemplatesScreen extends StatelessWidget {
                 runSpacing: 4,
                 children: template.placeholders.take(5).map((placeholder) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppTheme.primaryColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
@@ -511,9 +583,10 @@ class TemplatesScreen extends StatelessWidget {
     );
   }
 
-  void _showTemplateDialog(PromptTemplate template, TemplateController templateController) {
+  void _showTemplateDialog(
+      PromptTemplate template, TemplateController templateController) {
     final Map<String, TextEditingController> controllers = {};
-    
+
     // Create controllers for each placeholder
     for (String placeholder in template.placeholders) {
       controllers[placeholder] = TextEditingController();
@@ -548,7 +621,7 @@ class TemplatesScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                
+
                 Text(
                   'Fill in the required fields:',
                   style: TextStyle(
@@ -579,8 +652,10 @@ class TemplatesScreen extends StatelessWidget {
                           controller: controllers[placeholder],
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            hintText: 'Enter ${placeholder.replaceAll('_', ' ')}',
-                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                            hintText:
+                                'Enter ${placeholder.replaceAll('_', ' ')}',
+                            hintStyle:
+                                TextStyle(color: Colors.white.withOpacity(0.5)),
                             filled: true,
                             fillColor: Colors.black.withOpacity(0.2),
                             border: OutlineInputBorder(
@@ -606,7 +681,7 @@ class TemplatesScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                }).toList(),
+                }),
 
                 const SizedBox(height: 20),
                 Row(
@@ -617,27 +692,31 @@ class TemplatesScreen extends StatelessWidget {
                         onPressed: () async {
                           final values = <String, String>{};
                           bool allFilled = true;
-                          
+
                           for (String placeholder in template.placeholders) {
-                            final value = controllers[placeholder]?.text.trim() ?? '';
+                            final value =
+                                controllers[placeholder]?.text.trim() ?? '';
                             if (value.isEmpty) {
                               allFilled = false;
                               break;
                             }
                             values[placeholder] = value;
                           }
-                          
+
                           if (!allFilled) {
-                            Get.snackbar('Error', 'Please fill in all required fields');
+                            Get.snackbar(
+                                'Error', 'Please fill in all required fields');
                             return;
                           }
-                          
+
                           try {
-                            final result = await templateController.useTemplate(template.id, values);
+                            final result = await templateController.useTemplate(
+                                template.id, values);
                             Get.back();
                             _showGeneratedPromptDialog(result);
                           } catch (e) {
-                            Get.snackbar('Error', 'Failed to generate prompt: $e');
+                            Get.snackbar(
+                                'Error', 'Failed to generate prompt: $e');
                           }
                         },
                       ),
@@ -688,7 +767,6 @@ class TemplatesScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              
               Text(
                 template.name,
                 style: const TextStyle(
@@ -698,7 +776,6 @@ class TemplatesScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              
               Text(
                 template.description,
                 style: TextStyle(
@@ -707,7 +784,6 @@ class TemplatesScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -878,6 +954,111 @@ class TemplatesScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTemplateStats() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.trending_up_rounded,
+                  color: Colors.green.shade300,
+                  size: 16,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Most Popular',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.new_releases_outlined,
+                  color: Colors.blue.shade300,
+                  size: 16,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Recent',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.star_outline_rounded,
+                  color: Colors.yellow.shade300,
+                  size: 16,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Top Rated',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

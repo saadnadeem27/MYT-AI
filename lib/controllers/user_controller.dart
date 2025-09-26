@@ -83,12 +83,12 @@ class UserController extends GetxController {
         // Remove if already exists to move to front
         updatedHistory.remove(promptId);
         updatedHistory.insert(0, promptId);
-        
+
         // Keep only last 50 items
         if (updatedHistory.length > 50) {
           updatedHistory.removeRange(50, updatedHistory.length);
         }
-        
+
         final updatedUser = currentUser.value!.copyWith(
           promptHistory: updatedHistory,
           totalPromptsGenerated: currentUser.value!.totalPromptsGenerated + 1,

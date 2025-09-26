@@ -45,7 +45,8 @@ class UserModel {
       promptHistory: promptHistory ?? this.promptHistory,
       joinedAt: joinedAt ?? this.joinedAt,
       isPremium: isPremium ?? this.isPremium,
-      totalPromptsGenerated: totalPromptsGenerated ?? this.totalPromptsGenerated,
+      totalPromptsGenerated:
+          totalPromptsGenerated ?? this.totalPromptsGenerated,
     );
   }
 

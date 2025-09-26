@@ -11,17 +11,17 @@ class PromptController extends GetxController {
   final RxList<PromptModel> favoritePrompts = <PromptModel>[].obs;
   final RxList<PromptModel> trendingPrompts = <PromptModel>[].obs;
   final RxList<PromptModel> recentPrompts = <PromptModel>[].obs;
-  
+
   final RxString selectedCategory = 'All'.obs;
   final RxString selectedType = 'All'.obs;
   final RxString selectedTone = 'Neutral'.obs;
   final RxString selectedStyle = 'Standard'.obs;
   final RxInt selectedComplexity = 1.obs;
   final RxString searchQuery = ''.obs;
-  
+
   final RxBool isLoading = false.obs;
   final RxBool isGenerating = false.obs;
-  
+
   final RxString lastGeneratedPrompt = ''.obs;
 
   // Categories
@@ -82,9 +82,10 @@ class PromptController extends GetxController {
   void onInit() {
     super.onInit();
     loadPrompts();
-    
+
     // Listen to search changes
-    debounce(searchQuery, (_) => filterPrompts(), time: const Duration(milliseconds: 500));
+    debounce(searchQuery, (_) => filterPrompts(),
+        time: const Duration(milliseconds: 500));
   }
 
   Future<void> loadPrompts() async {
@@ -105,18 +106,23 @@ class PromptController extends GetxController {
 
   void filterPrompts() {
     var filtered = allPrompts.where((prompt) {
-      final matchesCategory = selectedCategory.value == 'All' || 
+      final matchesCategory = selectedCategory.value == 'All' ||
           prompt.category == selectedCategory.value;
-      final matchesType = selectedType.value == 'All' || 
-          prompt.type == selectedType.value;
+      final matchesType =
+          selectedType.value == 'All' || prompt.type == selectedType.value;
       final matchesSearch = searchQuery.value.isEmpty ||
-          prompt.title.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-          prompt.content.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-          prompt.tags.any((tag) => tag.toLowerCase().contains(searchQuery.value.toLowerCase()));
-      
+          prompt.title
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase()) ||
+          prompt.content
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase()) ||
+          prompt.tags.any((tag) =>
+              tag.toLowerCase().contains(searchQuery.value.toLowerCase()));
+
       return matchesCategory && matchesType && matchesSearch;
     }).toList();
-    
+
     filteredPrompts.assignAll(filtered);
   }
 

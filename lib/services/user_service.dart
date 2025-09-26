@@ -8,8 +8,8 @@ class UserService {
   // Dummy user data
   UserModel? _currentUser = UserModel(
     id: 'user_001',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
+    name: 'Alex Rivera',
+    email: 'alex.rivera@mytai.com',
     avatar: null,
     favoriteCategories: ['Writing', 'Art & Design', 'Coding'],
     favoritePrompts: ['2', '4', '6'],
@@ -42,7 +42,7 @@ class UserService {
     if (email.isNotEmpty && password.isNotEmpty) {
       _currentUser = UserModel(
         id: 'user_001',
-        name: 'John Doe',
+        name: 'Alex Rivera',
         email: email,
         joinedAt: DateTime.now().subtract(const Duration(days: 30)),
         totalPromptsGenerated: 47,

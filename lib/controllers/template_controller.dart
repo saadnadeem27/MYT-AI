@@ -10,7 +10,7 @@ class TemplateController extends GetxController {
   final RxList<PromptTemplate> filteredTemplates = <PromptTemplate>[].obs;
   final RxList<PromptTemplate> popularTemplates = <PromptTemplate>[].obs;
   final RxList<PromptTemplate> recentTemplates = <PromptTemplate>[].obs;
-  
+
   final RxString selectedCategory = 'All'.obs;
   final RxString searchQuery = ''.obs;
   final RxBool isLoading = false.obs;
@@ -31,9 +31,10 @@ class TemplateController extends GetxController {
   void onInit() {
     super.onInit();
     loadTemplates();
-    
+
     // Listen to search changes
-    debounce(searchQuery, (_) => filterTemplates(), time: const Duration(milliseconds: 500));
+    debounce(searchQuery, (_) => filterTemplates(),
+        time: const Duration(milliseconds: 500));
   }
 
   Future<void> loadTemplates() async {
@@ -53,15 +54,19 @@ class TemplateController extends GetxController {
 
   void filterTemplates() {
     var filtered = allTemplates.where((template) {
-      final matchesCategory = selectedCategory.value == 'All' || 
+      final matchesCategory = selectedCategory.value == 'All' ||
           template.category == selectedCategory.value;
       final matchesSearch = searchQuery.value.isEmpty ||
-          template.name.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-          template.description.toLowerCase().contains(searchQuery.value.toLowerCase());
-      
+          template.name
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase()) ||
+          template.description
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase());
+
       return matchesCategory && matchesSearch;
     }).toList();
-    
+
     filteredTemplates.assignAll(filtered);
   }
 
@@ -77,7 +82,8 @@ class TemplateController extends GetxController {
     recentTemplates.assignAll(recent.take(10).toList());
   }
 
-  Future<String> useTemplate(String templateId, Map<String, String> values) async {
+  Future<String> useTemplate(
+      String templateId, Map<String, String> values) async {
     try {
       final result = await _templateService.useTemplate(templateId, values);
       return result;

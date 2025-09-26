@@ -17,24 +17,29 @@ class MainNavigationScreen extends StatelessWidget {
     final navigationController = Get.put(NavigationController());
 
     return Scaffold(
-      extendBody: true,
-      body: Obx(() {
-        switch (navigationController.selectedIndex.value) {
-          case 0:
-            return const HomeScreen();
-          case 1:
-            return ExploreScreen();
-          case 2:
-            return const FavoritesScreen();
-          case 3:
-            return TemplatesScreen();
-          case 4:
-            return const ProfileScreen();
-          default:
-            return const HomeScreen();
-        }
-      }),
-      bottomNavigationBar: Obx(() => _buildBottomNavigationBar(navigationController)),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: AppTheme.backgroundLinearGradient,
+        ),
+        child: Obx(() {
+          switch (navigationController.selectedIndex.value) {
+            case 0:
+              return const HomeScreen();
+            case 1:
+              return ExploreScreen();
+            case 2:
+              return const FavoritesScreen();
+            case 3:
+              return TemplatesScreen();
+            case 4:
+              return const ProfileScreen();
+            default:
+              return const HomeScreen();
+          }
+        }),
+      ),
+      bottomNavigationBar:
+          Obx(() => _buildBottomNavigationBar(navigationController)),
     );
   }
 
@@ -119,7 +124,7 @@ class MainNavigationScreen extends StatelessWidget {
     required NavigationController navigationController,
   }) {
     final isSelected = navigationController.selectedIndex.value == index;
-    
+
     return GestureDetector(
       onTap: () => navigationController.changePage(index),
       child: AnimatedContainer(

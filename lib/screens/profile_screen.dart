@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../config/app_theme.dart';
+import '../config/app_routes.dart';
 import '../widgets/glass_widgets.dart';
 import '../controllers/user_controller.dart';
 import '../controllers/prompt_controller.dart';
@@ -15,98 +16,94 @@ class ProfileScreen extends StatelessWidget {
     final promptController = Get.find<PromptController>();
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.backgroundLinearGradient,
-        ),
-        child: SafeArea(
-          child: Obx(() {
-            final user = userController.currentUser.value;
-            if (user == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Obx(() {
+          final user = userController.currentUser.value;
+          if (user == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: AnimationLimiter(
-                child: Column(
-                  children: [
-                    // Profile Header
-                    AnimationConfiguration.staggeredList(
-                      position: 0,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildProfileHeader(user),
-                        ),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: AnimationLimiter(
+              child: Column(
+                children: [
+                  // Profile Header
+                  AnimationConfiguration.staggeredList(
+                    position: 0,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildProfileHeader(user),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                  ),
+                  const SizedBox(height: 30),
 
-                    // Stats Section
-                    AnimationConfiguration.staggeredList(
-                      position: 1,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildStatsSection(user),
-                        ),
+                  // Stats Section
+                  AnimationConfiguration.staggeredList(
+                    position: 1,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildStatsSection(user),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                  ),
+                  const SizedBox(height: 30),
 
-                    // Achievements Section
-                    AnimationConfiguration.staggeredList(
-                      position: 2,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildAchievementsSection(user),
-                        ),
+                  // Achievements Section
+                  AnimationConfiguration.staggeredList(
+                    position: 2,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildAchievementsSection(user),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                  ),
+                  const SizedBox(height: 30),
 
-                    // Recent Activity
-                    AnimationConfiguration.staggeredList(
-                      position: 3,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildRecentActivity(user, promptController),
-                        ),
+                  // Recent Activity
+                  AnimationConfiguration.staggeredList(
+                    position: 3,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildRecentActivity(user, promptController),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                  ),
+                  const SizedBox(height: 30),
 
-                    // Settings Section
-                    AnimationConfiguration.staggeredList(
-                      position: 4,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildSettingsSection(userController),
-                        ),
+                  // Settings Section
+                  AnimationConfiguration.staggeredList(
+                    position: 4,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildSettingsSection(userController),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                  ),
+                  const SizedBox(height: 30),
 
-                    // Logout Button
-                    AnimationConfiguration.staggeredList(
-                      position: 5,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildLogoutButton(userController),
-                        ),
+                  // Logout Button
+                  AnimationConfiguration.staggeredList(
+                    position: 5,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildLogoutButton(userController),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -115,19 +112,26 @@ class ProfileScreen extends StatelessWidget {
     return GlassContainer(
       child: Column(
         children: [
-          // Avatar
+          // Avatar with Status Indicator
           Stack(
             children: [
               Container(
-                width: 100,
-                height: 100,
+                width: 120,
+                height: 120,
                 decoration: BoxDecoration(
                   gradient: AppTheme.primaryLinearGradient,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
-                    width: 3,
+                    color: Colors.white.withOpacity(0.3),
+                    width: 4,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.purple.withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
                 child: user.avatar != null
                     ? ClipOval(
@@ -138,15 +142,33 @@ class ProfileScreen extends StatelessWidget {
                       )
                     : const Icon(
                         Icons.person,
-                        size: 50,
+                        size: 60,
                         color: Colors.white,
                       ),
               ),
+              // Online Status
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 3,
+                    ),
+                  ),
+                ),
+              ),
+              // Edit Button
               Positioned(
                 bottom: 0,
                 right: 0,
                 child: Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     gradient: AppTheme.secondaryLinearGradient,
                     shape: BoxShape.circle,
@@ -154,43 +176,61 @@ class ProfileScreen extends StatelessWidget {
                       color: Colors.white,
                       width: 2,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: const Icon(
-                    Icons.edit,
-                    size: 16,
+                    Icons.camera_alt_outlined,
+                    size: 18,
                     color: Colors.white,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
-          // Name and Email
+          // Name and Title
           Text(
             user.name,
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            user.email,
+            'AI Prompt Expert',
             style: TextStyle(
               fontSize: 16,
+              color: Colors.purple.shade300,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            user.email,
+            style: TextStyle(
+              fontSize: 14,
               color: Colors.white.withOpacity(0.7),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
-          // Premium Badge
+          // Status Badges Row
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Premium Badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: user.isPremium
                       ? const LinearGradient(
@@ -199,22 +239,62 @@ class ProfileScreen extends StatelessWidget {
                       : LinearGradient(
                           colors: [Colors.grey.shade600, Colors.grey.shade700],
                         ),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: user.isPremium
+                          ? Colors.orange.withOpacity(0.3)
+                          : Colors.grey.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      user.isPremium ? Icons.star : Icons.person,
+                      user.isPremium ? Icons.diamond : Icons.person,
                       color: Colors.white,
                       size: 16,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Text(
-                      user.isPremium ? 'Premium Member' : 'Free Member',
+                      user.isPremium ? 'Premium' : 'Free',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Verification Badge
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue.shade500, Colors.blue.shade600],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.verified_outlined,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Verified',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
                     ),
@@ -225,13 +305,39 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Member Since
-          Text(
-            'Member since ${_formatDate(user.joinedAt)}',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.6),
-            ),
+          // Activity Status
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.access_time_outlined,
+                color: Colors.white.withOpacity(0.6),
+                size: 16,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'Member since ${_formatDate(user.joinedAt)}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.6),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Icon(
+                Icons.radio_button_on,
+                color: Colors.green,
+                size: 16,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'Online now',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.green.shade300,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -298,7 +404,8 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, List<Color> gradient) {
+  Widget _buildStatCard(
+      String label, String value, IconData icon, List<Color> gradient) {
     return GlassContainer(
       child: Column(
         children: [
@@ -342,7 +449,7 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildAchievementsSection(user) {
     final achievements = _getAchievements(user);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -449,7 +556,8 @@ class ProfileScreen extends StatelessWidget {
                 'Generated prompt',
                 'Used ChatGPT prompt template',
                 Icons.auto_awesome,
-                DateTime.now().subtract(Duration(hours: user.promptHistory.indexOf(promptId))),
+                DateTime.now().subtract(
+                    Duration(hours: user.promptHistory.indexOf(promptId))),
               );
             }).toList(),
           ),
@@ -458,7 +566,8 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActivityItem(String title, String subtitle, IconData icon, DateTime time) {
+  Widget _buildActivityItem(
+      String title, String subtitle, IconData icon, DateTime time) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -536,6 +645,15 @@ class ProfileScreen extends StatelessWidget {
               ),
               _buildDivider(),
               _buildSettingsItem(
+                Icons.settings_outlined,
+                'Settings',
+                'App preferences and configurations',
+                () {
+                  Get.toNamed(AppRoutes.settings);
+                },
+              ),
+              _buildDivider(),
+              _buildSettingsItem(
                 Icons.notifications_outlined,
                 'Notifications',
                 'Manage notification preferences',
@@ -577,7 +695,8 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsItem(IconData icon, String title, String subtitle, VoidCallback onTap) {
+  Widget _buildSettingsItem(
+      IconData icon, String title, String subtitle, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -672,7 +791,10 @@ class ProfileScreen extends StatelessWidget {
                         child: GradientButton(
                           text: 'Cancel',
                           onPressed: () => Get.back(),
-                          gradient: [Colors.grey.shade600, Colors.grey.shade700],
+                          gradient: [
+                            Colors.grey.shade600,
+                            Colors.grey.shade700
+                          ],
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -701,8 +823,10 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void _showEditProfileDialog(UserController userController) {
-    final nameController = TextEditingController(text: userController.currentUser.value?.name);
-    final emailController = TextEditingController(text: userController.currentUser.value?.email);
+    final nameController =
+        TextEditingController(text: userController.currentUser.value?.name);
+    final emailController =
+        TextEditingController(text: userController.currentUser.value?.email);
 
     Get.dialog(
       Dialog(
@@ -861,7 +985,7 @@ class ProfileScreen extends StatelessWidget {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
-        child: Container(
+        child: SizedBox(
           height: Get.height * 0.7,
           child: GlassContainer(
             child: Column(
@@ -939,8 +1063,18 @@ class ProfileScreen extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return '${months[date.month - 1]} ${date.year}';
   }

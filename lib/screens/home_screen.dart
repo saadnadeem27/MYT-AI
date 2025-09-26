@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../config/app_theme.dart';
+import '../config/app_routes.dart';
 import '../widgets/glass_widgets.dart';
 import '../controllers/prompt_controller.dart';
 import '../controllers/user_controller.dart';
@@ -17,88 +18,84 @@ class HomeScreen extends StatelessWidget {
     final userController = Get.find<UserController>();
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.backgroundLinearGradient,
-        ),
-        child: SafeArea(
-          child: Obx(() {
-            if (promptController.isLoading.value) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: AnimationLimiter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header Section
-                    AnimationConfiguration.staggeredList(
-                      position: 0,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildHeader(userController),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-
-                    // Quick Generate Section
-                    AnimationConfiguration.staggeredList(
-                      position: 1,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildQuickGenerate(promptController),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-
-                    // Stats Section
-                    AnimationConfiguration.staggeredList(
-                      position: 2,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildStatsSection(userController),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-
-                    // Trending Prompts
-                    AnimationConfiguration.staggeredList(
-                      position: 3,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildTrendingSection(promptController),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-
-                    // Recent Prompts
-                    AnimationConfiguration.staggeredList(
-                      position: 4,
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: _buildRecentSection(promptController),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Obx(() {
+          if (promptController.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }),
-        ),
+          }
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: AnimationLimiter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header Section
+                  AnimationConfiguration.staggeredList(
+                    position: 0,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildHeader(userController),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Quick Generate Section
+                  AnimationConfiguration.staggeredList(
+                    position: 1,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildQuickGenerate(promptController),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Stats Section
+                  AnimationConfiguration.staggeredList(
+                    position: 2,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildStatsSection(userController),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Trending Prompts
+                  AnimationConfiguration.staggeredList(
+                    position: 3,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildTrendingSection(promptController),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Recent Prompts
+                  AnimationConfiguration.staggeredList(
+                    position: 4,
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: _buildRecentSection(promptController),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -110,71 +107,192 @@ class HomeScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Welcome back,',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.purple.shade400,
+                              Colors.blue.shade400
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          'Pro',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Obx(() => Text(
+                        userController.currentUser.value?.name ?? 'User',
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      )),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Online • All systems active',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.green.shade300,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Row(
               children: [
-                Text(
-                  'Welcome back,',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withOpacity(0.8),
+                GlassContainer(
+                  padding: const EdgeInsets.all(12),
+                  child: Stack(
+                    children: [
+                      const Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade400,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Obx(() => Text(
-                      userController.currentUser.value?.name ?? 'User',
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    )),
+                const SizedBox(width: 12),
+                GlassContainer(
+                  padding: const EdgeInsets.all(12),
+                  child: const Icon(
+                    Icons.settings_outlined,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
               ],
-            ),
-            GlassContainer(
-              padding: const EdgeInsets.all(12),
-              child: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                size: 24,
-              ),
             ),
           ],
         ),
-        const SizedBox(height: 20),
-        AnimatedTextKit(
-          animatedTexts: [
-            TypewriterAnimatedText(
-              'Generate amazing AI prompts',
-              textStyle: TextStyle(
-                fontSize: 18,
-                color: Colors.white.withOpacity(0.9),
-                fontWeight: FontWeight.w500,
-              ),
-              speed: const Duration(milliseconds: 100),
+        const SizedBox(height: 24),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.purple.shade400.withOpacity(0.2),
+                Colors.blue.shade400.withOpacity(0.2),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            TypewriterAnimatedText(
-              'Boost your creativity',
-              textStyle: TextStyle(
-                fontSize: 18,
-                color: Colors.white.withOpacity(0.9),
-                fontWeight: FontWeight.w500,
-              ),
-              speed: const Duration(milliseconds: 100),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.1),
+              width: 1,
             ),
-            TypewriterAnimatedText(
-              'Create stunning content',
-              textStyle: TextStyle(
-                fontSize: 18,
-                color: Colors.white.withOpacity(0.9),
-                fontWeight: FontWeight.w500,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.auto_awesome_outlined,
+                    color: Colors.purple.shade300,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'AI Assistant Ready',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
-              speed: const Duration(milliseconds: 100),
-            ),
-          ],
-          totalRepeatCount: 4,
-          pause: const Duration(milliseconds: 2000),
-          displayFullTextOnTap: true,
-          stopPauseOnTap: true,
+              const SizedBox(height: 8),
+              AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText(
+                    'Generate amazing AI prompts with precision',
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.8),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    speed: const Duration(milliseconds: 80),
+                  ),
+                  TypewriterAnimatedText(
+                    'Boost your creativity and productivity',
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.8),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    speed: const Duration(milliseconds: 80),
+                  ),
+                  TypewriterAnimatedText(
+                    'Create stunning content effortlessly',
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.8),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    speed: const Duration(milliseconds: 80),
+                  ),
+                ],
+                totalRepeatCount: 4,
+                pause: const Duration(milliseconds: 3000),
+                displayFullTextOnTap: true,
+                stopPauseOnTap: true,
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -225,7 +343,8 @@ class HomeScreen extends StatelessWidget {
                 child: GradientButton(
                   text: 'Generate Random',
                   onPressed: () async {
-                    final prompt = await promptController.generateRandomPrompt();
+                    final prompt =
+                        await promptController.generateRandomPrompt();
                     if (prompt.isNotEmpty) {
                       Get.dialog(
                         _buildPromptDialog(prompt),
@@ -235,6 +354,11 @@ class HomeScreen extends StatelessWidget {
                   isLoading: promptController.isGenerating.value,
                   icon: const Icon(Icons.casino, color: Colors.white, size: 20),
                 ),
+              ),
+              const SizedBox(width: 12),
+              GlassIconButton(
+                icon: Icons.tune,
+                onPressed: () => Get.toNamed(AppRoutes.customize),
               ),
               const SizedBox(width: 12),
               GlassIconButton(
@@ -288,7 +412,8 @@ class HomeScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, List<Color> gradient) {
+  Widget _buildStatCard(
+      String label, String value, IconData icon, List<Color> gradient) {
     return GlassContainer(
       child: Column(
         children: [
@@ -400,7 +525,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPromptCard(PromptModel prompt, PromptController promptController) {
+  Widget _buildPromptCard(
+      PromptModel prompt, PromptController promptController) {
     return Container(
       width: 280,
       margin: const EdgeInsets.only(right: 16),
@@ -412,7 +538,8 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppTheme.primaryColor.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
@@ -481,7 +608,9 @@ class HomeScreen extends StatelessWidget {
                   onTap: () => promptController.toggleFavorite(prompt),
                   child: Icon(
                     prompt.isFavorite ? Icons.bookmark : Icons.bookmark_border,
-                    color: prompt.isFavorite ? AppTheme.secondaryColor : Colors.white70,
+                    color: prompt.isFavorite
+                        ? AppTheme.secondaryColor
+                        : Colors.white70,
                     size: 20,
                   ),
                 ),
@@ -493,7 +622,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentPromptCard(PromptModel prompt, PromptController promptController) {
+  Widget _buildRecentPromptCard(
+      PromptModel prompt, PromptController promptController) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: GlassContainer(
@@ -548,7 +678,9 @@ class HomeScreen extends StatelessWidget {
                   onTap: () => promptController.toggleFavorite(prompt),
                   child: Icon(
                     prompt.isFavorite ? Icons.bookmark : Icons.bookmark_border,
-                    color: prompt.isFavorite ? AppTheme.secondaryColor : Colors.white70,
+                    color: prompt.isFavorite
+                        ? AppTheme.secondaryColor
+                        : Colors.white70,
                     size: 20,
                   ),
                 ),

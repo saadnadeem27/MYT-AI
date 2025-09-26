@@ -16,108 +16,190 @@ class ExploreScreen extends StatelessWidget {
     final promptController = Get.find<PromptController>();
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.backgroundLinearGradient,
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header with Search
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Explore Prompts',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Discover amazing AI prompts from our community',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GlassSearchBar(
-                      controller: _searchController,
-                      hintText: 'Search prompts, categories, or authors...',
-                      onChanged: (query) {
-                        promptController.setSearchQuery(query);
-                      },
-                      onClear: () {
-                        promptController.setSearchQuery('');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
-              // Category Filter
-              _buildCategoryFilter(promptController),
-
-              // Type Filter
-              _buildTypeFilter(promptController),
-
-              // Results
-              Expanded(
-                child: Obx(() {
-                  if (promptController.isLoading.value) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  final prompts = promptController.filteredPrompts;
-
-                  if (prompts.isEmpty) {
-                    return _buildEmptyState();
-                  }
-
-                  return AnimationLimiter(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: prompts.length,
-                      itemBuilder: (context, index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: _buildPromptCard(prompts[index], promptController),
-                            ),
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header with Search
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: AppTheme.primaryGradient,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                        );
-                      },
-                    ),
-                  );
-                }),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primaryColor.withOpacity(0.3),
+                              blurRadius: 20,
+                              spreadRadius: 0,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.explore_rounded,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Explore Prompts',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.trending_up_rounded,
+                                  size: 16,
+                                  color: Colors.green.shade400,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '1.2K+ prompts • 500+ new this week',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.white.withOpacity(0.7),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: AppTheme.secondaryGradient,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.auto_awesome_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            const Text(
+                              'Live',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  GlassSearchBar(
+                    controller: _searchController,
+                    hintText:
+                        'Search 1000+ prompts, templates, and categories...',
+                    onChanged: (query) {
+                      promptController.setSearchQuery(query);
+                    },
+                    onClear: () {
+                      promptController.setSearchQuery('');
+                    },
+                    onSubmitted: () {
+                      // Could add analytics or enhanced search here
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildQuickFilters(promptController),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // Category Filter
+            _buildCategoryFilter(promptController),
+
+            // Type Filter
+            _buildTypeFilter(promptController),
+
+            // Results
+            Expanded(
+              child: Obx(() {
+                if (promptController.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                final prompts = promptController.filteredPrompts;
+
+                if (prompts.isEmpty) {
+                  return _buildEmptyState();
+                }
+
+                return AnimationLimiter(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: prompts.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: _buildPromptCard(
+                                prompts[index], promptController),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: Obx(() => promptController.filteredPrompts.isNotEmpty
-          ? FloatingActionButton.extended(
-              onPressed: () {
-                promptController.clearFilters();
-                _searchController.clear();
-              },
-              backgroundColor: AppTheme.primaryColor,
-              icon: const Icon(Icons.clear_all, color: Colors.white),
-              label: const Text(
-                'Clear Filters',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          : const SizedBox.shrink()),
+      floatingActionButton:
+          Obx(() => promptController.filteredPrompts.isNotEmpty
+              ? FloatingActionButton.extended(
+                  onPressed: () {
+                    promptController.clearFilters();
+                    _searchController.clear();
+                  },
+                  backgroundColor: AppTheme.primaryColor,
+                  icon: const Icon(Icons.clear_all, color: Colors.white),
+                  label: const Text(
+                    'Clear Filters',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              : const SizedBox.shrink()),
     );
   }
 
@@ -125,24 +207,24 @@ class ExploreScreen extends StatelessWidget {
     return Container(
       height: 50,
       margin: const EdgeInsets.only(bottom: 16),
-      child: Obx(() => ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: promptController.categories.length,
-            itemBuilder: (context, index) {
-              final category = promptController.categories[index];
-              final isSelected = promptController.selectedCategory.value == category;
-              
-              return Container(
-                margin: const EdgeInsets.only(right: 12),
-                child: CategoryChip(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: promptController.categories.length,
+        itemBuilder: (context, index) {
+          final category = promptController.categories[index];
+
+          return Container(
+            margin: const EdgeInsets.only(right: 12),
+            child: Obx(() => CategoryChip(
                   label: category,
-                  isSelected: isSelected,
+                  isSelected:
+                      promptController.selectedCategory.value == category,
                   onTap: () => promptController.setCategory(category),
-                ),
-              );
-            },
-          )),
+                )),
+          );
+        },
+      ),
     );
   }
 
@@ -150,50 +232,55 @@ class ExploreScreen extends StatelessWidget {
     return Container(
       height: 40,
       margin: const EdgeInsets.only(bottom: 20),
-      child: Obx(() => ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: promptController.types.length,
-            itemBuilder: (context, index) {
-              final type = promptController.types[index];
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: promptController.types.length,
+        itemBuilder: (context, index) {
+          final type = promptController.types[index];
+
+          return Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: Obx(() {
               final isSelected = promptController.selectedType.value == type;
-              
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                child: GestureDetector(
-                  onTap: () => promptController.setType(type),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
+              return GestureDetector(
+                onTap: () => promptController.setType(type),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppTheme.secondaryColor.withOpacity(0.3)
+                        : Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
                       color: isSelected
-                          ? AppTheme.secondaryColor.withOpacity(0.3)
-                          : Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isSelected
-                            ? AppTheme.secondaryColor
-                            : Colors.white.withOpacity(0.2),
-                      ),
+                          ? AppTheme.secondaryColor
+                          : Colors.white.withOpacity(0.2),
                     ),
-                    child: Text(
-                      type,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isSelected
-                            ? AppTheme.secondaryColor
-                            : Colors.white.withOpacity(0.8),
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                      ),
+                  ),
+                  child: Text(
+                    type,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isSelected
+                          ? AppTheme.secondaryColor
+                          : Colors.white.withOpacity(0.8),
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
                 ),
               );
-            },
-          )),
+            }),
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildPromptCard(PromptModel prompt, PromptController promptController) {
+  Widget _buildPromptCard(
+      PromptModel prompt, PromptController promptController) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: GlassContainer(
@@ -207,7 +294,8 @@ class ExploreScreen extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         gradient: AppTheme.primaryLinearGradient,
                         borderRadius: BorderRadius.circular(12),
@@ -223,7 +311,8 @@ class ExploreScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppTheme.secondaryColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
@@ -265,8 +354,12 @@ class ExploreScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () => promptController.toggleFavorite(prompt),
                       child: Icon(
-                        prompt.isFavorite ? Icons.bookmark : Icons.bookmark_border,
-                        color: prompt.isFavorite ? AppTheme.secondaryColor : Colors.white70,
+                        prompt.isFavorite
+                            ? Icons.bookmark
+                            : Icons.bookmark_border,
+                        color: prompt.isFavorite
+                            ? AppTheme.secondaryColor
+                            : Colors.white70,
                         size: 20,
                       ),
                     ),
@@ -307,7 +400,8 @@ class ExploreScreen extends StatelessWidget {
                 runSpacing: 4,
                 children: prompt.tags.take(5).map((tag) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -368,7 +462,8 @@ class ExploreScreen extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: _getToneColor(prompt.tone).withOpacity(0.2),
                             borderRadius: BorderRadius.circular(8),
@@ -384,9 +479,11 @@ class ExploreScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: _getStyleColor(prompt.style).withOpacity(0.2),
+                            color:
+                                _getStyleColor(prompt.style).withOpacity(0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -415,7 +512,7 @@ class ExploreScreen extends StatelessWidget {
                     onPressed: () {
                       Get.dialog(_buildPromptDialog(prompt));
                     },
-                    height: 40,
+                    height: 50,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -552,7 +649,8 @@ class ExploreScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     gradient: AppTheme.primaryLinearGradient,
                     borderRadius: BorderRadius.circular(8),
@@ -575,7 +673,8 @@ class ExploreScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppTheme.secondaryColor.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(8),
@@ -669,5 +768,110 @@ class ExploreScreen extends StatelessWidget {
       default:
         return Colors.white70;
     }
+  }
+
+  Widget _buildQuickFilters(PromptController promptController) {
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildQuickFilterChip(
+                  'Trending',
+                  Icons.trending_up_rounded,
+                  AppTheme.primaryGradient,
+                  onTap: () {
+                    // Filter by trending prompts
+                    promptController.setCategory('All');
+                    promptController.setSearchQuery('trending');
+                  },
+                ),
+                const SizedBox(width: 12),
+                _buildQuickFilterChip(
+                  'Recent',
+                  Icons.schedule_rounded,
+                  [Colors.blue.shade400, Colors.cyan.shade400],
+                  onTap: () {
+                    // Filter by recent prompts
+                    promptController.setSearchQuery('recent');
+                  },
+                ),
+                const SizedBox(width: 12),
+                _buildQuickFilterChip(
+                  'Popular',
+                  Icons.favorite_rounded,
+                  [Colors.pink.shade400, Colors.red.shade400],
+                  onTap: () {
+                    // Filter by popular prompts
+                    promptController.setSearchQuery('popular');
+                  },
+                ),
+                const SizedBox(width: 12),
+                _buildQuickFilterChip(
+                  'Free',
+                  Icons.diamond_rounded,
+                  [Colors.green.shade400, Colors.teal.shade400],
+                  onTap: () {
+                    // Filter by free prompts
+                    promptController.setSearchQuery('free');
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickFilterChip(
+    String label,
+    IconData icon,
+    List<Color> gradient, {
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradient,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: [
+            BoxShadow(
+              color: gradient[0].withOpacity(0.3),
+              blurRadius: 15,
+              spreadRadius: 0,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 18,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
